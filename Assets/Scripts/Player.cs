@@ -6,6 +6,7 @@ using System;
 public class Player : MonoBehaviour
 {
     public event Action<float, float> OnMove;
+    public event Action<int> OnPolusChange;
 
     public GameObject Planet;
 
@@ -23,6 +24,7 @@ public class Player : MonoBehaviour
     private Vector2 collisionExitDiretion;
 
     private bool isCollision;
+    private int polusDirection = 1;
 
     public void OnObjectCollision(GameObject other)
     {
@@ -61,8 +63,8 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        float dAzimut = Input.GetAxis("Horizontal") * _speed * Time.deltaTime;
-        float dZenit = Input.GetAxis("Vertical") * _speed * Time.deltaTime;
+        float dAzimut = polusDirection * Input.GetAxis("Horizontal") * _speed * Time.deltaTime;
+        float dZenit = polusDirection * -Input.GetAxis("Vertical") * _speed * Time.deltaTime;
 
         prevZenit = zenit;
         prevAzimut = azimut;
@@ -70,7 +72,13 @@ public class Player : MonoBehaviour
         zenit += dZenit;
         azimut += dAzimut;
 
-        //this.transform.LookAt(_planet.transform.position);
+        if (zenit > 180 || zenit < 0)
+        {
+            zenit -= dZenit;
+            azimut += 180;
+            polusDirection = -polusDirection;
+            OnPolusChange?.Invoke(polusDirection);
+        }
 
         ApplyPosition();
     }
