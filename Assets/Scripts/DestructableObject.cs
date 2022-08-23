@@ -28,7 +28,7 @@ public class DestructableObject : InteractableObject
 
             if (Health <= 0)
             {
-                Destroy(this);
+                Destroy(gameObject);
             }
             else
             {
