@@ -28,6 +28,6 @@ public class MovePeriodically : MonoBehaviour
             _moveVector = -_moveVector;
         }
 
-        transform.Translate(_moveVector * _speed * Time.deltaTime);
+        transform.position =  transform.position + _moveVector * _speed * Time.deltaTime;
     }
 }
