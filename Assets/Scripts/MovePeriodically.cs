@@ -16,8 +16,8 @@ public class MovePeriodically : MonoBehaviour
     void Start()
     {
         _speed = 4 * _amplitide / (_periodSeconds * 1000);
-        _startPosition = transform.position;
-        _moveVector = (transform.position - _moveTo).normalized;
+        _startPosition = gameObject.transform.position;
+        _moveVector = (gameObject.transform.position - _moveTo).normalized;
     }
 
     // Update is called once per frame
@@ -28,6 +28,6 @@ public class MovePeriodically : MonoBehaviour
             _moveVector = -_moveVector;
         }
 
-        transform.position =  transform.position + _moveVector * _speed * Time.deltaTime;
+        gameObject.transform.position =  gameObject.transform.position + _moveVector * _speed * Time.deltaTime;
     }
 }

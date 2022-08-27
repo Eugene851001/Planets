@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Assets.Scripts;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, INamedEntity
 {
     public event Action<float, float> OnMove;
     public event Action<int> OnPolusChange;
@@ -25,6 +26,11 @@ public class Player : MonoBehaviour
 
     private bool isCollision;
     private int polusDirection = 1;
+
+    public string Name => "Player";
+
+    public float Zenit => zenit;
+    public float Azimut => azimut;
 
     public void OnObjectCollision(GameObject other)
     {

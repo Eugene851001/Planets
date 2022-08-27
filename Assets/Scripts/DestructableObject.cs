@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class DestructableObject : InteractableObject
 {
-    [SerializeField] private Healthbar healthbar; 
+    [SerializeField] private Healthbar healthbar;
+    [SerializeField] private GameObject dropedItemPrefab;
 
     public int MaxHealth = 100;
     public int Health = 100;
@@ -29,6 +30,10 @@ public class DestructableObject : InteractableObject
             if (Health <= 0)
             {
                 Destroy(gameObject);
+                if (dropedItemPrefab != null)
+                {
+                    Instantiate(dropedItemPrefab, transform.position, transform.rotation);
+                }
             }
             else
             {
