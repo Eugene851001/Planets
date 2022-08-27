@@ -1880,7 +1880,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Planet: {fileID: 1534589514}
-  _distance: 5
   _speed: 15
 --- !u!143 &2015807950
 CharacterController:
@@ -1907,6 +1906,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8078387958267730454, guid: 2b70daf18ffee304a9e093be5dd2f862, type: 3}
+      propertyPath: Planet
+      value: 
+      objectReference: {fileID: 1534589514}
     - target: {fileID: 8577228155242927275, guid: 2b70daf18ffee304a9e093be5dd2f862, type: 3}
       propertyPath: m_RootOrder
       value: 13

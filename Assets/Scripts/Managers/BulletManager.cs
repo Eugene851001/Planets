@@ -7,6 +7,7 @@ public class BulletManager : MonoBehaviour
 {
     private int lastShootTime;
     [SerializeField] private int shootInterval;
+    [SerializeField] private GameObject _planet;
     [SerializeField] private GameObject _bulletPrefab;
 
     private List<Bullet> _bullets = new List<Bullet>();
@@ -33,7 +34,9 @@ public class BulletManager : MonoBehaviour
 
                 var bulletObject = Instantiate(_bulletPrefab, player.transform);
                 var bullet = bulletObject.GetComponent<Bullet>();
-                
+
+                bullet.InitPlanet(_planet);
+
                 bullet.Azimut = player.Azimut;
                 bullet.Zenit = player.Zenit;
 
