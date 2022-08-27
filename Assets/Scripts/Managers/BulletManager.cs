@@ -29,16 +29,20 @@ public class BulletManager : MonoBehaviour
             if (currentTime - lastShootTime > shootInterval)
             {
                 lastShootTime = currentTime;
-                float dZenit = 1;
-                float dAzimit = 0;
+
+                var playerPos = Camera.main.WorldToScreenPoint(player.transform.position);
+                var mousePos = Input.mousePosition;
+                var dir = (mousePos - playerPos).normalized;
+                float dZenit = dir.y;
+                float dAzimit = dir.x;
 
                 var bulletObject = Instantiate(_bulletPrefab, player.transform);
                 var bullet = bulletObject.GetComponent<Bullet>();
 
                 bullet.InitPlanet(_planet);
 
-                bullet.Azimut = player.Azimut;
-                bullet.Zenit = player.Zenit;
+                bullet.Azimut = player.Azimut + dAzimit * 5;
+                bullet.Zenit = player.Zenit + dZenit * 5;
 
                 bullet.DAzimut = dAzimit;
                 bullet.DZenit = dZenit;

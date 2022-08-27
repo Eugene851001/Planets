@@ -5,8 +5,8 @@ using Assets.Scripts;
 
 public class Bullet : SphereMoveableObject
 {
-    [SerializeField] private float speed;
-    [SerializeField] private float damage;
+    [SerializeField] protected float speed;
+    [SerializeField] protected float damage;
 
     public float Zenit { get => zenit; set => zenit = value; }
     public float Azimut { get => azimut; set => azimut = value; }
@@ -31,6 +31,18 @@ public class Bullet : SphereMoveableObject
     void Update()
     {
         Move();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var damageable = other.GetComponent<IDamageable>();  
+
+        if (damageable != default(IDamageable))
+        {
+            damageable.TakeDamage((int)damage);
+        }
+
+        Destroy(this.gameObject);
     }
 
     void HandleChangePolus(int polusDir) => dZenit = -dZenit;

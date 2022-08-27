@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DestructableObject : InteractableObject
+public class DestructableObject : InteractableObject, IDamageable
 {
     [SerializeField] private Healthbar healthbar;
     [SerializeField] private GameObject dropedItemPrefab;
@@ -23,24 +23,26 @@ public class DestructableObject : InteractableObject
 
     protected override void Interact()
     {
-        if (Health > 0)
+        TakeDamage(20);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+
+        if (Health <= 0)
         {
-            Health -= 20;
-
-            if (Health <= 0)
+            Destroy(gameObject);
+            if (dropedItemPrefab != null)
             {
-                Destroy(gameObject);
-                if (dropedItemPrefab != null)
-                {
-                    Instantiate(dropedItemPrefab, transform.position, transform.rotation);
-                }
+                Instantiate(dropedItemPrefab, transform.position, transform.rotation);
             }
-            else
-            {
-                healthbar.UpdateHealth(MaxHealth, Health);
+        }
+        else
+        {
+            healthbar.UpdateHealth(MaxHealth, Health);
 
-                Debug.Log($"Health: {Health}/{MaxHealth}");
-            }
+            Debug.Log($"Health: {Health}/{MaxHealth}");
         }
     }
 }

@@ -6,11 +6,13 @@ public enum GameState
 {
     Run,
     Inventory,
+    GameOver,
 }
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject _inventoryPanel;
+    [SerializeField] private GameObject _gameOverPanel;
 
     public static GameManager Instance;
 
@@ -27,7 +29,9 @@ public class GameManager : MonoBehaviour
     public void UpdateState(GameState newState)
     {
         State = newState;
+
         _inventoryPanel.SetActive(State == GameState.Inventory);
+        _gameOverPanel.SetActive(State == GameState.GameOver);
     }
 
     // Start is called before the first frame update

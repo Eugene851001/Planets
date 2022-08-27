@@ -4,9 +4,12 @@ using UnityEngine;
 using System;
 using Assets.Scripts;
 
-public class Player : SphereMoveableObject, INamedEntity
+public class Player : SphereMoveableObject, INamedEntity, IDamageable
 {
     [SerializeField] private float _speed = 100;
+
+    private int maxHealth = 100;
+    private int health = 100;
 
     private float prevZenit;
     private float prevAzimut;
@@ -71,5 +74,17 @@ public class Player : SphereMoveableObject, INamedEntity
         azimut += collisionExitDiretion.y * collisionExitSpeed * Time.deltaTime;
 
         ApplyPosition();
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health < 0)
+        {
+            GameManager.Instance.UpdateState(GameState.GameOver);
+        }
+
+        Debug.Log($"Take Damage, health: {health}/{maxHealth}");
     }
 }
