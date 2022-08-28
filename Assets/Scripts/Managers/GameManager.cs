@@ -4,6 +4,8 @@ using UnityEngine;
 
 public enum GameState
 {
+    MainMenu,
+    Tutorial,
     Run,
     Inventory,
     GameOver,
@@ -11,6 +13,8 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject _mainMenuPanel;
+    [SerializeField] private GameObject _helpPanel;
     [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private GameObject _gameOverPanel;
 
@@ -21,7 +25,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        State = GameState.Run;
+        State = GameState.MainMenu;
 
         UpdateState(State);
     }
@@ -30,6 +34,10 @@ public class GameManager : MonoBehaviour
     {
         State = newState;
 
+        Time.timeScale = State == GameState.Run ? 1 : 0;
+
+        _mainMenuPanel.SetActive(State == GameState.MainMenu);
+        _helpPanel.SetActive(State == GameState.Tutorial);
         _inventoryPanel.SetActive(State == GameState.Inventory);
         _gameOverPanel.SetActive(State == GameState.GameOver);
     }
