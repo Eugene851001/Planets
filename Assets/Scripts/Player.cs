@@ -21,9 +21,6 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
 
     public string Name => "Player";
 
-    public float Zenit => zenit;
-    public float Azimut => azimut;
-
     public void OnObjectCollision(GameObject other)
     {
         isCollision = true;
@@ -52,6 +49,7 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
         if (!isCollision)
         {
             Move();
+            //Debug.Log($"Player position: {Zenit}:{Azimut}");
         }
         else
         {

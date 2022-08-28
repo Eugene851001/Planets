@@ -8,8 +8,8 @@ public class Bullet : SphereMoveableObject
     [SerializeField] protected float speed;
     [SerializeField] protected float damage;
 
-    public float Zenit { get => zenit; set => zenit = value; }
-    public float Azimut { get => azimut; set => azimut = value; }
+    public float Zenit { set => zenit = value; }
+    public float Azimut {  set => azimut = value; }
 
     public float DZenit { get => dZenit; set => dZenit = GetDistance(value); }
     public float DAzimut { get => dAzimut; set => dAzimut = GetDistance(value); }

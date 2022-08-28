@@ -14,6 +14,9 @@ public abstract class SphereMoveableObject : MonoBehaviour
     public event Action<float, float> OnMove;
     public event Action<int> OnPolusChange;
 
+    public float Azimut => azimut;
+    public float Zenit => zenit;
+
     public GameObject Planet;
 
 
