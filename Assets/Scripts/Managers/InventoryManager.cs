@@ -9,9 +9,12 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject _slotPrefab;
     private List<InventorySlot> _slots = new List<InventorySlot>();
 
+    private ILogger logger;
+
     private void Awake()
     {
         Inventory.OnInventoryChanged += Draw;
+        logger = LoggerFactory.Instance.GetLogger();
     }
 
     private void OnDestroy()

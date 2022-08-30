@@ -21,6 +21,6 @@ public class MainMenu : MonoBehaviour
 
     public void OnQuit()
     {
-        Application.Quit();
+        Application.Quit(0);
     }
 }

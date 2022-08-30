@@ -9,9 +9,12 @@ public class Inventory : MonoBehaviour
     public Dictionary<ItemData, InventoryItem> _itemsDict = 
         new Dictionary<ItemData, InventoryItem>();
 
+    private ILogger logger;
+
     private void Awake()
     {
-        ColletableItem.OnCollect += Add; 
+        ColletableItem.OnCollect += Add;
+        logger = LoggerFactory.Instance.GetLogger();
     }
 
     private void OnDestroy()
@@ -21,7 +24,7 @@ public class Inventory : MonoBehaviour
 
     public void Add(ItemData item)
     {
-        Debug.Log($"Added item to inventory: {item.Name}");
+        logger.Log($"Added item to inventory: {item.Name}");
 
         if (_itemsDict.ContainsKey(item))
         {

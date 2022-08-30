@@ -6,6 +6,8 @@ using Assets.Scripts;
 
 public class Player : SphereMoveableObject, INamedEntity, IDamageable
 {
+    //TODO: move to another class (PlayerMagare or Destructabke object)
+    [SerializeField] private Healthbar _healthbar;
     [SerializeField] private float _speed = 100;
 
     private int maxHealth = 100;
@@ -19,7 +21,15 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
 
     private bool isCollision;
 
+    private ILogger _logger;
+
     public string Name => "Player";
+
+    private void Awake()
+    {
+        _logger = LoggerFactory.Instance.GetLogger();
+        InitPlanet(Planet);
+    }
 
     public void OnObjectCollision(GameObject other)
     {
@@ -83,6 +93,7 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
             GameManager.Instance.UpdateState(GameState.GameOver);
         }
 
-        Debug.Log($"Take Damage, health: {health}/{maxHealth}");
+        _healthbar.UpdateHealth(health, maxHealth);
+        _logger.Log($"Take Damage, health: {health}/{maxHealth}");
     }
 }

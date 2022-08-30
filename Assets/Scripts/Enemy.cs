@@ -28,12 +28,15 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     private float health = 100;
 
     private IThinker state;
+    private ILogger _logger;
 
     private void Awake()
     {
         Player = FindObjectOfType<Player>();
         state = new Patrolling(Player);
         state.Context = this;
+
+        _logger = LoggerFactory.Instance.GetLogger();
     }
 
     public void InitLocation(float zenit, float azimut)
@@ -53,7 +56,6 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     {
         state.Think();
         Move();
-        Debug.Log($"Enemy position: {Zenit}:{Azimut}");
     }
 
     public void SetDestination(float zenit, float azimut)
@@ -70,9 +72,10 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     {
         health -= damage;
 
-        Debug.Log($"{Name} took damage");
+        _logger.Log($"{Name} took {damage} damage");
         if (health == 0)
         {
+            _logger.Log($"{Name} died");
             Destroy(gameObject);
         }
     }
@@ -86,7 +89,7 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
             lastAttackTime = currentTime;
             
             damageable.TakeDamage(damage);
-            Debug.Log($"{Name} attack {damage}");
+            _logger.Log($"{Name} attacks with {damage} demage");
         }
     }
 
