@@ -25,6 +25,8 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
 
     public string Name => "Player";
 
+    public int PolusDirection => polusDirection;
+
     private void Awake()
     {
         _logger = LoggerFactory.Instance.GetLogger();

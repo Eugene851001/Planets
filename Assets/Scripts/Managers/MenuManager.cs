@@ -8,7 +8,7 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
-        _handleInventory = new NoSpamAction(2000, HandleInventory);
+        _handleInventory = new NoSpamAction(200, HandleInventory);
     }
     // Start is called before the first frame update
     void Start()

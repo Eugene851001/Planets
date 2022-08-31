@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public enum GameState
 {
@@ -24,6 +25,8 @@ public class GameManager : MonoBehaviour
 
     public GameState State { get; private set; }
 
+    public static Action<GameState, GameState> OnStateChanged;
+
     private void Awake()
     {
         Instance = this;
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        var oldState = State;
         State = newState;
 
         Time.timeScale = State == GameState.Run ? 1 : 0;
@@ -49,6 +53,8 @@ public class GameManager : MonoBehaviour
         _helpPanel.SetActive(State == GameState.Tutorial);
         _inventoryPanel.SetActive(State == GameState.Inventory);
         _gameOverPanel.SetActive(State == GameState.GameOver);
+
+        OnStateChanged?.Invoke(oldState, State);
     }
 
     // Start is called before the first frame update

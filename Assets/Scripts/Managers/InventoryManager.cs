@@ -5,16 +5,16 @@ using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
-    private const int CellsCount = 4;
+    private const int CellsCount = 5;
+    [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private GameObject _slotPrefab;
     private List<InventorySlot> _slots = new List<InventorySlot>();
-
-    private ILogger logger;
+    private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
 
     private void Awake()
     {
         Inventory.OnInventoryChanged += Draw;
-        logger = LoggerFactory.Instance.GetLogger();
+        GameManager.OnStateChanged += HandleShowInventory;
     }
 
     private void OnDestroy()
@@ -40,6 +40,20 @@ public class InventoryManager : MonoBehaviour
         }
 
         _slots = new List<InventorySlot>(CellsCount);
+        _inventoryItems = new List<InventoryItem>();
+    }
+
+    private void HandleShowInventory(GameState oldState, GameState newState)
+    {
+        if (oldState == GameState.Run && newState == GameState.Inventory)
+        {
+            DrawLast();
+        }
+    }
+
+    public void DrawLast()
+    {
+        Draw(_inventoryItems);
     }
 
     public void Draw(IEnumerable<InventoryItem> items)
@@ -52,6 +66,7 @@ public class InventoryManager : MonoBehaviour
             if (i < items.Count())
             {
                 slot.Draw(items.ElementAt(i));
+                _inventoryItems.Add(items.ElementAt(i));
             }
         }
     }
@@ -59,7 +74,7 @@ public class InventoryManager : MonoBehaviour
     private InventorySlot CreateSlot()
     {
         var slotObject = Instantiate(_slotPrefab);
-        slotObject.transform.SetParent(this.transform);
+        slotObject.transform.SetParent(_inventoryPanel.transform);
         var slot = slotObject.GetComponent<InventorySlot>();
 
         slot.Clear();
