@@ -30,7 +30,10 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
     private void Awake()
     {
         _logger = LoggerFactory.Instance.GetLogger();
-        InitPlanet(Planet);
+        PlanetsManager.OnPlanetChanged += HandlePlanetChange;
+
+        var planet = PlanetsManager.Instance.ActivePlanet;
+        InitPlanet(planet);
     }
 
     public void OnObjectCollision(GameObject other)
@@ -60,6 +63,13 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
     {
         if (!isCollision)
         {
+            if (Input.GetKey(KeyCode.P))
+            {
+                var planetName = PlanetsManager.Instance.ActivePlanetName == Constants.Planets.Earth
+                    ? Constants.Planets.Mars : Constants.Planets.Earth;
+                PlanetsManager.Instance.ChangePlanet(planetName);
+            }
+
             Move();
             //Debug.Log($"Player position: {Zenit}:{Azimut}");
         }
@@ -97,5 +107,10 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
 
         _healthbar.UpdateHealth(health, maxHealth);
         _logger.Log($"Take Damage, health: {health}/{maxHealth}");
+    }
+
+    private void HandlePlanetChange(GameObject oldPlanet, GameObject newPlanet)
+    {
+        InitPlanet(newPlanet);
     }
 }

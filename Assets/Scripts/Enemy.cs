@@ -8,7 +8,7 @@ using UnityEngine;
 public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
 {
     public float DZenit { get => dZenit; set => dZenit = GetDistance(value); }
-    public float DAzimut { get => dAzimut; set => dAzimut = value; }
+    public float DAzimut { get => dAzimut; set => dAzimut = GetDistance(value); }
 
     //in degrees
     public float FollowRange = 45;
@@ -37,6 +37,12 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
         state.Context = this;
 
         _logger = LoggerFactory.Instance.GetLogger();
+        PlanetsManager.OnPlanetChanged += HandleChangePlanet;
+    }
+
+    private void OnDestroy()
+    {
+        PlanetsManager.OnPlanetChanged -= HandleChangePlanet;
     }
 
     public void InitLocation(float zenit, float azimut)
@@ -96,5 +102,17 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     public void ChangeState(IThinker newState)
     {
         state = newState;
+    }
+
+    private void HandleChangePlanet(GameObject oldPlanet, GameObject newPlanet)
+    {
+        if (newPlanet != this.Planet)
+        {
+            ChangeState(new Freeze());
+        }
+        else
+        {
+            ChangeState(new Patrolling(Player));
+        }
     }
 }

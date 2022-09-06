@@ -17,6 +17,8 @@ public class PlanetCamera : MonoBehaviour
         _planet = _player.Planet;
         _player.OnMove += HandleMove;
         _player.OnPolusChange += HandlePolusChange;
+
+        PlanetsManager.OnPlanetChanged += HandleChangePlanet;
     }
 
     // Update is called once per frame
@@ -34,5 +36,10 @@ public class PlanetCamera : MonoBehaviour
     private void HandlePolusChange(int polusDirection)
     {
         UpDirection = -UpDirection;
+    }
+
+    private void HandleChangePlanet(GameObject oldPlanet, GameObject newPlanet)
+    {
+        _planet = newPlanet;
     }
 }
