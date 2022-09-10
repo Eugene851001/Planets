@@ -8,15 +8,17 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject shootingEnemyPrefab;
 
-    private List<(SpherePoint, GameObject)> spawnPoints = new List<(SpherePoint, GameObject)>();
+    private List<(Vector2, GameObject)> spawnPoints;
 
     private List<Enemy> enemies = new List<Enemy>();
 
-    private NoSpamAction _spawn;
-
     private void Awake()
     {
-
+        spawnPoints = new List<(Vector2, GameObject)>()
+        {
+            (new Vector2(90, 80), enemyPrefab),
+            (new Vector2(20, 100), shootingEnemyPrefab),
+        };
     }
 
     // Start is called before the first frame update
@@ -26,19 +28,18 @@ public class EnemyManager : MonoBehaviour
         //_spawn = new NoSpamAction(5000, () => Spawn());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Spawn()
     {
-        _spawn?.Run();
+        foreach (var spawnPoint in spawnPoints)
+        {
+            SpawnEnemy(spawnPoint.Item1.x, spawnPoint.Item1.y, spawnPoint.Item2);
+        }
     }
 
-    private Enemy Spawn()
+    private Enemy SpawnEnemy(float zenit, float azimut, GameObject prefab)
     {
-        var enemyObj = Instantiate(enemyPrefab);
+        var enemyObj = Instantiate(prefab);
         var enemy = enemyObj.GetComponent<Enemy>();
-
-        float zenit = 90;
-        float azimut = 80;
 
         enemy.InitPlanet(planet);
         enemy.InitLocation(zenit, azimut);

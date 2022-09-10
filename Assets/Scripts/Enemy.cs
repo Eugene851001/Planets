@@ -24,15 +24,15 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     private int attackInterval = 1000;
     private int lastAttackTime;
 
-    private float speed = 5;
-
     private int maxHealth = 100;
     private int health = 100;
 
     private IThinker state;
     private ILogger _logger;
 
-    private void Awake()
+    private void Awake() => InitState();
+
+    protected void InitState()
     {
         Player = FindObjectOfType<Player>();
         state = new Patrolling(Player);
@@ -80,7 +80,7 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
         health -= damage;
 
         _logger?.Log($"{Name} took {damage} damage");
-        healthbar.UpdateHealth(maxHealth, health);
+        healthbar?.UpdateHealth(maxHealth, health);
         if (health == 0)
         {
             _logger?.Log($"{Name} died");

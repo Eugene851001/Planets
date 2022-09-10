@@ -66,7 +66,7 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
     {
         if (!isCollision)
         {
-            if (Input.GetKey(KeyCode.P))
+            if (Input.GetKeyUp(KeyCode.P))
             {
                 var planetName = PlanetsManager.Instance.ActivePlanetName == Constants.Planets.Earth
                     ? Constants.Planets.Mars : Constants.Planets.Earth;

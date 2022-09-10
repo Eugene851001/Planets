@@ -14,6 +14,8 @@ public class ShootingEnemy : Enemy
 
     private void Awake()
     {
+        base.InitState();
+
         AttackRange = 30;
     }
 }
