@@ -14,10 +14,11 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     public float FollowRange = 45;
     public float AttackRange = 10;
 
-    public string Name => "Bandit";
+    public virtual string Name => "Bandit";
 
     public Player Player;
 
+    [SerializeField] private Healthbar healthbar;
     private int damage = 20;
 
     private int attackInterval = 1000;
@@ -25,7 +26,8 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
 
     private float speed = 5;
 
-    private float health = 100;
+    private int maxHealth = 100;
+    private int health = 100;
 
     private IThinker state;
     private ILogger _logger;
@@ -36,7 +38,12 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
         state = new Patrolling(Player);
         state.Context = this;
 
-        _logger = LoggerFactory.Instance.GetLogger();
+        InitPlanet(PlanetsManager.Instance.ActivePlanet);
+    }
+
+    void Start()
+    {
+        _logger = LoggerFactory.Instance?.GetLogger();
         PlanetsManager.OnPlanetChanged += HandleChangePlanet;
     }
 
@@ -49,12 +56,6 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     {
         this.zenit = zenit;
         this.azimut = azimut;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -78,25 +79,31 @@ public class Enemy : SphereMoveableObject, IDamageable, INamedEntity
     {
         health -= damage;
 
-        _logger.Log($"{Name} took {damage} damage");
+        _logger?.Log($"{Name} took {damage} damage");
+        healthbar.UpdateHealth(maxHealth, health);
         if (health == 0)
         {
-            _logger.Log($"{Name} died");
+            _logger?.Log($"{Name} died");
             Destroy(gameObject);
         }
     }
 
-    public void Attack(IDamageable damageable)
+    public virtual void Attack(IDamageable damageable)
     {
         int currentTime = Environment.TickCount;
 
         if (currentTime - lastAttackTime > attackInterval)
         {
             lastAttackTime = currentTime;
-            
-            damageable.TakeDamage(damage);
-            _logger.Log($"{Name} attacks with {damage} demage");
+
+            HelpAttack(Player, damageable);
         }
+    }
+
+    protected virtual void HelpAttack(SpherePoint target, IDamageable damageable)
+    {
+        damageable.TakeDamage(damage);
+        _logger?.Log($"{Name} attacks with {damage} demage");
     }
 
     public void ChangeState(IThinker newState)

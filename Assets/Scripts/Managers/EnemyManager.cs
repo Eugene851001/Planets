@@ -6,10 +6,18 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private GameObject planet;
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject shootingEnemyPrefab;
+
+    private List<(SpherePoint, GameObject)> spawnPoints = new List<(SpherePoint, GameObject)>();
 
     private List<Enemy> enemies = new List<Enemy>();
 
     private NoSpamAction _spawn;
+
+    private void Awake()
+    {
+
+    }
 
     // Start is called before the first frame update
     void Start()

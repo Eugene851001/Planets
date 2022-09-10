@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts;
+using System;
 
 public class Bullet : SphereMoveableObject
-{
-    [SerializeField] protected float speed;
-    [SerializeField] protected float damage;
+{ 
+    [SerializeField] protected int damage;
 
     public float Zenit { set => zenit = value; }
     public float Azimut {  set => azimut = value; }
@@ -14,7 +14,11 @@ public class Bullet : SphereMoveableObject
     public float DZenit { get => dZenit; set => dZenit = GetDistance(value); }
     public float DAzimut { get => dAzimut; set => dAzimut = GetDistance(value); }
 
+    public int Damage => damage;
+
     public INamedEntity Owner;
+
+    public event Action<Bullet, IDamageable> OnBulletDamage;
     
     // Start is called before the first frame update
     void Start()
@@ -37,12 +41,10 @@ public class Bullet : SphereMoveableObject
     {
         var damageable = other.GetComponent<IDamageable>();  
 
-        if (damageable != default(IDamageable))
+        if (damageable != default(IDamageable) && damageable != Owner)
         {
-            damageable.TakeDamage((int)damage);
+            OnBulletDamage?.Invoke(this, damageable);
         }
-
-        Destroy(this.gameObject);
     }
 
     void HandleChangePolus(int polusDir) => dZenit = -dZenit;

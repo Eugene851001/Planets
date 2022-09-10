@@ -19,9 +19,9 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.I))
+        if (Input.GetKeyUp(KeyCode.I))
         {
-            _handleInventory.Run(); 
+            HandleInventory(); 
         }
     }
 

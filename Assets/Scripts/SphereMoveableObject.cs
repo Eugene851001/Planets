@@ -3,36 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class SphereMoveableObject : MonoBehaviour
+public abstract class SphereMoveableObject : SpherePoint
 {
-    protected float azimut, zenit;
     protected float dAzimut, dZenit;
+    [SerializeField] protected float speed;
 
     protected int polusDirection = 1;
-    protected float radius;
 
     public event Action<float, float> OnMove;
     public event Action<int> OnPolusChange;
 
-    public float Azimut => azimut;
-    public float Zenit => zenit;
-
-    public GameObject Planet;
-
-
-    private void Awake()
-    {
-        if (Planet != null)
-        {
-            SetRadius();
-        }
-    }
-
-    public void InitPlanet(GameObject planet)
-    {
-        Planet = planet;
-        SetRadius();
-    }
+    public float Speed => speed;
 
     // Start is called before the first frame update
     void Start()
@@ -81,7 +62,4 @@ public abstract class SphereMoveableObject : MonoBehaviour
     {
 
     }
-
-    private void SetRadius() => 
-        radius = Planet.GetComponent<SphereCollider>().radius * Planet.gameObject.transform.localScale.x;
 }

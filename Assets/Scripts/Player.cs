@@ -6,9 +6,11 @@ using Assets.Scripts;
 
 public class Player : SphereMoveableObject, INamedEntity, IDamageable
 {
-    //TODO: move to another class (PlayerMagare or Destructabke object)
+    //TODO: move to another class (PlayerManager or Destructable object)
     [SerializeField] private Healthbar _healthbar;
-    [SerializeField] private float _speed = 100;
+
+    private int shootInterval = 1000;
+    private int lastShootTime;
 
     private int maxHealth = 100;
     private int health = 100;
@@ -29,6 +31,7 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
 
     private void Awake()
     {
+        speed = 10;
         _logger = LoggerFactory.Instance.GetLogger();
         PlanetsManager.OnPlanetChanged += HandlePlanetChange;
 
@@ -69,6 +72,10 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
                     ? Constants.Planets.Mars : Constants.Planets.Earth;
                 PlanetsManager.Instance.ChangePlanet(planetName);
             }
+            else if (GameManager.Instance.State == GameState.Run && Input.GetMouseButton(0))
+            {
+                HandleShoot();
+            }
 
             Move();
             //Debug.Log($"Player position: {Zenit}:{Azimut}");
@@ -81,8 +88,8 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
 
     protected override void BeforeMove()
     {
-        dAzimut = polusDirection * Input.GetAxis("Horizontal") * _speed * Time.deltaTime;
-        dZenit = polusDirection * -Input.GetAxis("Vertical") * _speed * Time.deltaTime;
+        dAzimut = polusDirection * Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        dZenit = polusDirection * -Input.GetAxis("Vertical") * speed * Time.deltaTime;
 
         prevZenit = zenit;
         prevAzimut = azimut;
@@ -112,5 +119,22 @@ public class Player : SphereMoveableObject, INamedEntity, IDamageable
     private void HandlePlanetChange(GameObject oldPlanet, GameObject newPlanet)
     {
         InitPlanet(newPlanet);
+    }
+
+    private void HandleShoot()
+    {
+        int currentTime = Environment.TickCount;
+        if (currentTime - lastShootTime > shootInterval)
+        {
+            lastShootTime = currentTime;
+
+            var playerPos = Camera.main.WorldToScreenPoint(transform.position);
+            var mousePos = Input.mousePosition;
+            var dir = (mousePos - playerPos).normalized;
+            float dZenit = PolusDirection * -dir.y;
+            float dAzimut = PolusDirection * dir.x;
+
+            BulletManager.Instance.CreateBullet(this.gameObject, dZenit, dAzimut);
+        }
     }
 }
