@@ -10,6 +10,7 @@ public enum GameState
     Tutorial,
     Run,
     Inventory,
+    Dialog,
     GameOver,
 }
 
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _playerInfoPanel;
+    [SerializeField] private GameObject _dialogPanel;
 
     public static GameManager Instance;
 
@@ -53,6 +55,7 @@ public class GameManager : MonoBehaviour
         _helpPanel.SetActive(State == GameState.Tutorial);
         _inventoryPanel.SetActive(State == GameState.Inventory);
         _gameOverPanel.SetActive(State == GameState.GameOver);
+        _dialogPanel.SetActive(State == GameState.Dialog);
 
         OnStateChanged?.Invoke(oldState, State);
     }
