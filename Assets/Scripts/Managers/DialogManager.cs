@@ -14,9 +14,9 @@ public class DialogManager : MonoBehaviour, IDialogNodeVisitor
     [SerializeField] private DialogChanel dialogChanel;
 
     [SerializeField] private GameObject buttonsPanel;
-    [SerializeField] private GameObject buttonPrefab;
+    [SerializeField] private Button buttonPrefab;
 
-    private List<GameObject> buttons = new List<GameObject>();
+    private List<Button> buttons = new List<Button>();
 
     private DialogSequencer dialogSequencer;
 
@@ -27,6 +27,8 @@ public class DialogManager : MonoBehaviour, IDialogNodeVisitor
         dialogSequencer.OnNodeStart += dialogChanel.RaiseNodeStart;
 
         dialogChanel.OnDialogStart += dialogSequencer.StartDialog;
+        dialogChanel.OnDialogEnd += dialogSequencer.EndDialog;
+        dialogChanel.OnNodeRequest += dialogSequencer.StartNode;
         dialogChanel.OnNodeStart += HandleStartNode;
     }
 
@@ -35,6 +37,7 @@ public class DialogManager : MonoBehaviour, IDialogNodeVisitor
         dialogSequencer.OnNodeStart -= dialogChanel.RaiseNodeStart;
 
         dialogChanel.OnDialogStart -= dialogSequencer.StartDialog;
+        dialogChanel.OnDialogEnd -= dialogSequencer.EndDialog;
         dialogChanel.OnNodeStart -= HandleStartNode;
     }
 
@@ -51,11 +54,23 @@ public class DialogManager : MonoBehaviour, IDialogNodeVisitor
         dialogText.text = line.Text;
     }
 
-    private void CreateButton(string text)
+    private void CreateButton(LinearDialogNode node)
+    {
+        var button = Instantiate(buttonPrefab);
+        button.gameObject.transform.SetParent(buttonsPanel.transform);
+        button.GetComponentInChildren<TextMeshProUGUI>().text = 
+            node.NextNode == null ? "Finish" : "Next";
+        button.onClick.AddListener(() => HandleNextButton(node));
+
+        buttons.Add(button);
+    }
+
+    private void CreateButton(ChoiceNode node)
     {
         var button = Instantiate(buttonPrefab);
         button.transform.SetParent(buttonsPanel.transform);
-        button.GetComponentInChildren<TextMeshProUGUI>().text = text; ;
+        button.GetComponentInChildren<TextMeshProUGUI>().text = node.Preview;
+        button.onClick.AddListener(() => HandleChoiceButton(node));
 
         buttons.Add(button);
     }
@@ -64,6 +79,7 @@ public class DialogManager : MonoBehaviour, IDialogNodeVisitor
     {
         foreach (var button in buttons)
         {
+            button.onClick.RemoveAllListeners();
             Destroy(button.gameObject);
         }
 
@@ -75,13 +91,29 @@ public class DialogManager : MonoBehaviour, IDialogNodeVisitor
         ClearButtons();
         foreach (var choice in node.Choices)
         {
-            CreateButton(choice.Preview);
+            CreateButton(choice);
         }
     }
 
     public void Visit(LinearDialogNode node)
     {
         ClearButtons();
-        CreateButton("Next");
+        CreateButton(node);
+    }
+
+    private void HandleNextButton(LinearDialogNode node) => OnDialogButtonClick(node.NextNode);
+
+    private void HandleChoiceButton(ChoiceNode choice) => OnDialogButtonClick(choice.NextNode);
+
+    private void OnDialogButtonClick(DialogNode nextNode)
+    {
+        if (nextNode == null)
+        {
+            dialogChanel.RaiseDialogEnd();
+        }
+        else
+        {
+            dialogChanel.RaiseRequestNode(nextNode);
+        }
     }
 }

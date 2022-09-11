@@ -16,8 +16,8 @@ public class EnemyManager : MonoBehaviour
     {
         spawnPoints = new List<(Vector2, GameObject)>()
         {
-            (new Vector2(90, 80), enemyPrefab),
-            (new Vector2(20, 100), shootingEnemyPrefab),
+           // (new Vector2(90, 80), enemyPrefab),
+            //(new Vector2(20, 100), shootingEnemyPrefab),
         };
     }
 

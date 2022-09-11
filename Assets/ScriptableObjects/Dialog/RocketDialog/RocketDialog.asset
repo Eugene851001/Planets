@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f27bed676c25428544ee90ee7d988, type: 3}
+  m_Name: RocketDialog
+  m_EditorClassIdentifier: 
+  FirstNode: {fileID: 11400000, guid: e6c4dffde7907c747a4d6df7158d1e04, type: 2}

@@ -10,10 +10,11 @@ using Assets.ScriptableObjects.Dialog;
 
 namespace Assets.ScriptableObjects.Chanels
 {
+    [CreateAssetMenu(menuName = "Chanels/Dialog")]
     public class DialogChanel: ScriptableObject
     {
         public event Action<Dialog.Dialog> OnDialogStart;
-        public event Action<Dialog.Dialog> OnDialogEnd;
+        public event Action OnDialogEnd;
 
         public event Action<DialogNode> OnNodeRequest;
         public event Action<DialogNode> OnNodeStart;
@@ -24,9 +25,9 @@ namespace Assets.ScriptableObjects.Chanels
             OnDialogStart?.Invoke(dialog);
         }
 
-        public void RaiseDialogEnd(Dialog.Dialog dialog)
+        public void RaiseDialogEnd()
         {
-            OnDialogEnd?.Invoke(dialog);
+            OnDialogEnd?.Invoke();
         }
 
         public void RaiseRequestNode(DialogNode node)

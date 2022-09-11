@@ -24,12 +24,18 @@ public class DialogSequencer
 
         OnDialogStart?.Invoke(currentDialog);
         OnNodeStart?.Invoke(currentNode);
+
+        GameManager.Instance.UpdateState(GameState.Dialog);
     }
 
-    public void EndDialog(Dialog dialog)
+    public void EndDialog()
     {
+        OnDialogEnd?.Invoke(currentDialog);
+
         currentDialog = null;
-        OnDialogEnd?.Invoke(dialog);
+        currentNode = null;
+
+        GameManager.Instance.UpdateState(GameState.Run);
     }
 
     public void StartNode(DialogNode node)

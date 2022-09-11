@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Dialog/Narration line")]
 public class NarrationLine : ScriptableObject
 {
-    public NarractionCharacter Character;
+    public NarrationCharacter Character;
 
     public string Text;
 }
