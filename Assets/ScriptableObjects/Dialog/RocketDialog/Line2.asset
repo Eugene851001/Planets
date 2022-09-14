@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Line2
   m_EditorClassIdentifier: 
   Character: {fileID: 11400000, guid: d7a93c65654020248a93c2de890c0095, type: 2}
-  Text: It is nice planet
+  Text: Do u want to visit it?

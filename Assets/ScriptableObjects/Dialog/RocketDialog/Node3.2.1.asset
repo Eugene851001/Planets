@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b5e4af86102ca447b178fb6fd03958e, type: 3}
-  m_Name: Line1
+  m_Script: {fileID: 11500000, guid: 4d9fc1a195922bf448cb5b8c59cbcac0, type: 3}
+  m_Name: Node3.2.1
   m_EditorClassIdentifier: 
-  Character: {fileID: 11400000, guid: d7a93c65654020248a93c2de890c0095, type: 2}
-  Text: Hello! There is a nice planet nearby
+  Line: {fileID: 11400000, guid: aefce11d71f12ec40a2f922f331eb6aa, type: 2}
+  NextNode: {fileID: 0}

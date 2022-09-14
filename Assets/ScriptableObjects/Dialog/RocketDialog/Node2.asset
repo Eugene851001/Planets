@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Node2
   m_EditorClassIdentifier: 
   Line: {fileID: 11400000, guid: 0d2c575e723754e448505b9e447b8fa4, type: 2}
-  NextNode: {fileID: 0}
+  NextNode: {fileID: 11400000, guid: fd48a0bff8fba974cbb1a92501378602, type: 2}
